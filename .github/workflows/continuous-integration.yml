@@ -1,0 +1,13 @@
+name: CI
+#run-name: ${{ github.actor }} triggered
+on: [push]
+jobs:
+    build:
+        name: Build
+        runs-on: windows-2019
+        steps:
+            - uses: actions/checkout@v4
+    test-unit-test:
+        name: 'Test: Unit Tests'
+        needs: build
+        runs-on: windows-2019
