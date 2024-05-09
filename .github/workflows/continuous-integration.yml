@@ -3,11 +3,16 @@ name: CI
 on: [push]
 jobs:
     build:
-        name: Build
+        name: 'Build'
         runs-on: windows-2019
         steps:
             - uses: actions/checkout@v4
+            - name: Print Building
+              run: echo 'Building'
     test-unit-test:
         name: 'Test: Unit Tests'
         needs: build
         runs-on: windows-2019
+        steps:
+            - name: Print Testing
+              run: echo 'Testing'
