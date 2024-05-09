@@ -39,3 +39,13 @@ jobs:
         steps:
             - name: Print Deploying
               run: echo 'Deploying'
+    deploy-live:
+        name: 'Deploy: Live'
+        needs: deploy-beta
+        runs-on: windows-2019
+        environment:
+            name: Live
+            url: https://www.gregoryjenk.com
+        steps:
+            - name: Print Deploying
+              run: echo 'Deploying'
