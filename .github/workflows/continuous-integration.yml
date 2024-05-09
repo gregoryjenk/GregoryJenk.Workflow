@@ -1,6 +1,8 @@
 name: CI
 #run-name: ${{ github.actor }} triggered
-on: [push]
+on:
+    push:
+    pull_request:
 jobs:
     build:
         name: 'Build'
@@ -9,10 +11,17 @@ jobs:
             - uses: actions/checkout@v4
             - name: Print Building
               run: echo 'Building'
-    test-unit-test:
+    test-unit-tests:
         name: 'Test: Unit Tests'
         needs: build
         runs-on: windows-2019
         steps:
             - name: Print Testing
               run: echo 'Testing'
+    scan-sonarqube:
+        name: 'Scan: SonarQube'
+        needs: test-unit-tests
+        runs-on: windows-2019
+        steps:
+            - name: Print Scanning
+              run: echo 'Scanning'
