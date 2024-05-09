@@ -1,0 +1,40 @@
+name: CD
+#run-name: ${{ github.actor }} triggered
+on:
+    release:
+        types: [ created ]
+jobs:
+    build:
+        name: 'Build'
+        runs-on: windows-2019
+        steps:
+            - uses: actions/checkout@v4
+            - name: Print Building
+              run: echo 'Building'
+    test-unit-tests:
+        name: 'Test: Unit Tests'
+        needs: build
+        runs-on: windows-2019
+        steps:
+            - name: Print Testing
+              run: echo 'Testing'
+    deploy-test:
+        name: 'Deploy: Test'
+        needs: test-unit-tests
+        runs-on: windows-2019
+        environment:
+            name: Test
+            url: https://test.gregoryjenk.com
+        steps:
+            - name: Print Deploying
+              run: echo 'Deploying'
+    deploy-beta:
+        name: 'Deploy: Beta'
+        needs: deploy-test
+        runs-on: windows-2019
+        environment:
+            name: Beta
+            url: https://beta.gregoryjenk.com
+        steps:
+            - name: Print Deploying
+              run: echo 'Deploying'
