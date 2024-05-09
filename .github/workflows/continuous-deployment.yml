@@ -19,9 +19,16 @@ jobs:
         steps:
             - name: Print Testing
               run: echo 'Testing'
+    archive:
+        name: 'Archive'
+        needs: test-unit-tests
+        runs-on: windows-2019
+        steps:
+            - name: Print Archiving
+              run: echo 'Archiving'
     deploy-test:
         name: 'Deploy: Test'
-        needs: test-unit-tests
+        needs: archive
         runs-on: windows-2019
         environment:
             name: Test
