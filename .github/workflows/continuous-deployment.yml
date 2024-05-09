@@ -2,7 +2,8 @@ name: CD
 #run-name: ${{ github.actor }} triggered
 on:
     release:
-        types: [ created ]
+        types:
+            - created
 jobs:
     build:
         name: 'Build'

@@ -2,6 +2,8 @@ name: CI
 #run-name: ${{ github.actor }} triggered
 on:
     push:
+        tags-ignore:
+            - '*'
     pull_request:
 jobs:
     build:
