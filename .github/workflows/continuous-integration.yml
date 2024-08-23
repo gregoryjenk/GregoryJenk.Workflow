@@ -1,4 +1,4 @@
-name: CI
+name: Continuous Integration
 #run-name: ${{ github.actor }} triggered
 on:
     push:
@@ -9,23 +9,23 @@ on:
     pull_request:
 jobs:
     build:
-        name: 'Build'
+        name: Build
         runs-on: windows-2019
         steps:
-            - uses: actions/checkout@v4
-            - name: Print Building
-              run: echo 'Building'
-    test-unit-tests:
-        name: 'Test: Unit Tests'
-        needs: build
-        runs-on: windows-2019
-        steps:
-            - name: Print Testing
-              run: echo 'Testing'
-    scan-sonarqube:
-        name: 'Scan: SonarQube'
-        needs: test-unit-tests
-        runs-on: windows-2019
-        steps:
-            - name: Print Scanning
-              run: echo 'Scanning'
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup
+              uses: actions/setup-dotnet@v4
+              with:
+                dotnet-version: 8.0.x
+            - name: Restore
+              run: dotnet restore src
+            - name: Build
+              run: dotnet build src --configuration Release --no-restore
+            - name: Test
+              run: dotnet test src --configuration Release --no-build --verbosity normal
+            - name: Code Coverage
+              run: |
+                dotnet tool install dotnet-coverage --global
+                #dotnet test src --configuration Release --no-build --verbosity normal --collect "Code Coverage"
+                dotnet-coverage collect "dotnet test src --configuration Release --no-build --verbosity normal" --output-format xml --output "dotnet-coverage.xml"
