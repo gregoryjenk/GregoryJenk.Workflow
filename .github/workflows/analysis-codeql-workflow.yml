@@ -8,7 +8,7 @@ on:
 jobs:
     analyse:
         name: Analyse (${{ matrix.language }})
-        runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+        runs-on: ubuntu-latest
         permissions:
             packages: read
             security-events: write
@@ -16,7 +16,7 @@ jobs:
             fail-fast: false
             matrix:
                 include:
-                    - build-mode: none
+                    - build-mode: autobuild
                       language: csharp
         steps:
             - name: Checkout
@@ -27,6 +27,8 @@ jobs:
                 build-mode: ${{ matrix.build-mode }}
                 languages: ${{ matrix.language }}
                 queries: security-and-quality
+            - name: Autobuild
+              uses: github/codeql-action/autobuild@v3
             - name: Analyse
               uses: github/codeql-action/analyze@v3
               with:
