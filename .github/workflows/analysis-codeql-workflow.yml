@@ -32,4 +32,4 @@ jobs:
             - name: Analyse
               uses: github/codeql-action/analyze@v3
               with:
-                category: "/language: ${{matrix.language}}"
+                category: "configuration: ${{ matrix.build-mode }} ${{ matrix.language }}"
