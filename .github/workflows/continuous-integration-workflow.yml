@@ -1,0 +1,31 @@
+name: Continuous Integration
+#run-name: ${{ github.actor }} triggered
+on:
+    push:
+        branches:
+            - **
+        tags-ignore:
+            - **
+    pull_request:
+jobs:
+    build:
+        name: Build
+        runs-on: windows-2019
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup
+              uses: actions/setup-dotnet@v4
+              with:
+                dotnet-version: 8.0.x
+            - name: Restore
+              run: dotnet restore src
+            - name: Build
+              run: dotnet build src --configuration Release --no-restore
+            - name: Test
+              run: dotnet test src --configuration Release --no-build --verbosity normal
+            - name: Coverage
+              run: |
+                dotnet tool install dotnet-coverage --global
+                #dotnet test src --configuration Release --no-build --verbosity normal --collect "Code Coverage"
+                dotnet-coverage collect "dotnet test src --configuration Release --no-build --verbosity normal" --output-format xml --output "dotnet-coverage.xml"

@@ -1,0 +1,61 @@
+name: Continuous Deployment
+#run-name: ${{ github.actor }} triggered
+on:
+    release:
+        types:
+            - published
+    workflow_dispatch:
+jobs:
+    build:
+        name: Build
+        runs-on: windows-2019
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup
+              uses: actions/setup-dotnet@v4
+              with:
+                dotnet-version: 8.0.x
+            - name: Restore
+              run: dotnet restore src
+            - name: Build
+              run: dotnet build src --configuration Release --no-restore
+            - name: Test
+              run: dotnet test src --configuration Release --no-build --verbosity normal
+            - name: Publish
+              run: dotnet publish src --configuration Release --no-build
+            - name: Upload
+              uses: actions/upload-artifact@v4
+              with:
+                name: build-release
+                path: .\src\GregoryJenk.Workflow.Model\bin\Release\net8.0\publish\**\*
+    deploy-test:
+        name: Test
+        needs: build
+        runs-on: windows-2019
+        environment:
+            name: Test
+            url: https://test.gregoryjenk.com
+        steps:
+            - name: Deploy
+              run: echo 'Deploy'
+    deploy-beta:
+        name: Beta
+        needs: deploy-test
+        runs-on: windows-2019
+        environment:
+            name: Beta
+            url: https://beta.gregoryjenk.com
+        steps:
+            - name: Deploy
+              run: echo 'Deploy'
+    deploy-live:
+        name: Live
+        needs: deploy-beta
+        runs-on: windows-2019
+        environment:
+            name: Live
+            url: https://www.gregoryjenk.com
+        steps:
+            - name: Deploy
+              run: echo 'Deploy'
