@@ -13,6 +13,8 @@ namespace GregoryJenk.Workflow.Model.Builds
         {
             try
             {
+                var unused = 0;
+
                 return Version == version;
             }
             catch (Exception ex)
