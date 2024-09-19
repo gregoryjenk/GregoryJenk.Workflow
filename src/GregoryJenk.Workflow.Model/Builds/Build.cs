@@ -13,7 +13,8 @@ namespace GregoryJenk.Workflow.Model.Builds
         {
             try
             {
-                var unused = 0;
+                var unused0 = 0;
+                var unused1 = 1;
 
                 return Version == version;
             }
