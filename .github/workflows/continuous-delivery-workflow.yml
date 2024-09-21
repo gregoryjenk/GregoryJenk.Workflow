@@ -9,6 +9,9 @@ jobs:
     build:
         name: Build
         runs-on: windows-2019
+        permissions:
+            attestations: write
+            id-token: write
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -24,6 +27,10 @@ jobs:
               run: dotnet test src --configuration Release --no-build --verbosity normal
             - name: Publish
               run: dotnet publish src --configuration Release --no-build
+            - name: Attest
+              uses: actions/attest-build-provenance@v1
+              with:
+                subject-path: .\src\GregoryJenk.Workflow.Model\bin\Release\net8.0\publish\**\*
             - name: Upload
               uses: actions/upload-artifact@v4
               with:
