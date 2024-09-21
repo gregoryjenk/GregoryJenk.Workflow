@@ -8,7 +8,7 @@ on:
 jobs:
     build:
         name: Build
-        runs-on: windows-2019
+        runs-on: ubuntu-latest
         permissions:
             attestations: write
             id-token: write
@@ -27,15 +27,17 @@ jobs:
               run: dotnet test src --configuration Release --no-build --verbosity normal
             - name: Publish
               run: dotnet publish src --configuration Release --no-build
+            - name: Package
+              run: zip -r build-release.zip /src/GregoryJenk.Workflow.Model/bin/Release/net8.0/publish/
             - name: Attest
               uses: actions/attest-build-provenance@v1
               with:
-                subject-path: .\src\GregoryJenk.Workflow.Model\bin\Release\net8.0\publish\**\*
+                subject-path: build-release.zip
             - name: Upload
               uses: actions/upload-artifact@v4
               with:
                 name: build-release
-                path: .\src\GregoryJenk.Workflow.Model\bin\Release\net8.0\publish\**\*
+                path: build-release.zip
     deploy-test:
         name: Test
         needs: build
