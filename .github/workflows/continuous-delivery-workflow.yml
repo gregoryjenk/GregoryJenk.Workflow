@@ -28,7 +28,7 @@ jobs:
             - name: Publish
               run: dotnet publish src --configuration Release --no-build
             - name: Package
-              run: zip -r build-release.zip . -i /src/GregoryJenk.Workflow.Model/bin/Release/net8.0/publish/
+              run: zip build-release.zip . -i /src/GregoryJenk.Workflow.Model/bin/Release/net8.0/publish/**/*
             - name: Attest
               uses: actions/attest-build-provenance@v1
               with:
